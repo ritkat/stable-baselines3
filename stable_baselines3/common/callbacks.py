@@ -461,7 +461,7 @@ class EvalCallback(EventCallback):
             # Reset success rate buffer
             self._is_success_buffer = []
 
-            episode_rewards, episode_lengths = evaluate_policy(
+            episode_rewards, episode_lengths, termins, truncs = evaluate_policy(
                 self.model,
                 self.eval_env,
                 n_eval_episodes=self.n_eval_episodes,
@@ -503,6 +503,8 @@ class EvalCallback(EventCallback):
             # Add to current Logger
             self.logger.record("eval/mean_reward", float(mean_reward))
             self.logger.record("eval/mean_ep_length", mean_ep_length)
+            self.logger.record("eval/terminated", termins)
+            self.logger.record("eval/terminated", truncs)
 
             if len(self._is_success_buffer) > 0:
                 success_rate = np.mean(self._is_success_buffer)
